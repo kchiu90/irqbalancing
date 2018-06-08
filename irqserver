@@ -1,0 +1,52 @@
+#!/bin/bash
+
+### BEGIN INIT INFO
+# Provides:             irqserver
+# Required-Start:       $remote_fs $syslog
+# Required-Stop:        $remote_fs $syslog
+# Default-Start:        2 3 4 5
+# Default-Stop:         0 1 6
+# Short-Description:    This is the init script for irqserver
+# Description:          Task: IRQ Client/Server in Python. An init script to start this service at machine boot time.
+### END INIT INFO
+
+PIDFILE=/var/run/irqserver.pid
+if [[ -f $PIDFILE ]]
+then
+        PID=$(cat ${PIDFILE})
+else
+        PID=""
+fi
+RUNNINGPID=$(ps aux | grep 'irq_server' | grep -v grep | awk '{print $2}')
+
+
+case $1 in
+   start)
+       # Check if it's running already
+       if [[ "$PID" == "$RUNNINGPID" ]] && [[ ! -z "${PID// }" ]]
+       then
+           echo "irqserver already running."
+       else
+       # Launch your program as a detached process
+           echo "Starting irqserver"
+           python /home/jchiu/code/irqbalancing/server/irq_server.py  &
+       # Get its PID and store it
+           echo $! > ${PIDFILE}
+       fi
+   ;;
+   stop)
+      kill `cat ${PIDFILE}`
+      # Now that it's killed, don't forget to remove the PID file
+      rm ${PIDFILE}
+   ;;
+   status)
+      if [[ "$PID" == "$RUNNINGPID" ]] && [[ ! -z "${PID// }" ]]; then
+    echo "irqserver is Running with PID ${RUNNINGPID}"
+      else
+    echo "irqserver is not Running"
+      fi
+   ;;
+   *)
+      echo "usage: irqserver {start|stop|status}" ;;
+esac
+exit 0

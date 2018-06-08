@@ -1,0 +1,50 @@
+<h1 style="color: #5e9ca0;">Welcome to irqservice Flask Homepage!</h1>
+<h2>This service can provide following information:</h2>
+<ul>
+    <li><strong>irq_server</strong>
+        <ul>
+            <li>get_current_distribution</li>
+            <li>get_interrupt_by_cpu</li>
+            <li>set_affinity</li>
+        </ul>
+    </li>
+</ul>
+<h3>Try following requests:</h3>
+<ul>
+    <li>For current distribution:
+        <ul>
+            <li><a href="http://localhost:5000/get_current_distribution?format=json">http://localhost:5000/get_current_distribution<strong>?format=json</strong></a>
+            </li>
+            <li><a href="http://localhost:5000/get_current_distribution?format=raw">http://localhost:5000/get_current_distribution<strong>?format=raw</strong></a>
+            </li>
+        </ul>
+    </li>
+</ul>
+<ul>
+    <li>For CPU interrupts:
+        <ul>
+            <li><a href="http://localhost:5000/get_interrupt_by_cpu">http://localhost:5000/get_interrupt_by_cpu</a>&nbsp;(All
+                CPU, 5 seconds)
+            </li>
+            <li>
+                <a href="http://localhost:5000/get_interrupt_by_cpu?cpu=1">http://localhost:5000/get_interrupt_by_cpu<strong>?cpu=1</strong></a>&nbsp;(CPU1,
+                5 seconds)
+            </li>
+            <li><a href="http://localhost:5000/get_interrupt_by_cpu?cpu=1&amp;second=3">http://localhost:5000/get_interrupt_by_cpu<strong>?cpu=2&amp;second=3</strong></a>&nbsp;(CPU2,
+                3seconds)
+            </li>
+        </ul>
+    </li>
+</ul>
+<ul>
+    <li>For smp_affinity modification:
+        <ul>
+            <li><a href="http://localhost:5000/set_affinity/129?cpu=f">http://localhost:5000/set_affinity/<strong>129?cpu=f</strong></a><strong>&nbsp;</strong>(PUT
+                request, server must run as root)
+            </li>
+        </ul>
+    </li>
+</ul>
+<p>&nbsp;</p>
+<h4>Enjoy!</h4>
+<p>2018 | James Chiu | kuo.chiu@verizondigitalmedia.com</p>
