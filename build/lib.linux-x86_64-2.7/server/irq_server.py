@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 """
 Task: IRQ Client/Server in Python.
 IRQ Information Service like a service, that presents a restful API which allows:
@@ -8,8 +7,7 @@ IRQ Information Service like a service, that presents a restful API which allows
 - Set the CPU affinity for each interrupt.
 - Provide a basic init script to start this service at machine boot time.
 - Package the service as a basic wheel using setuptools.
-
-Author: James Kuo Chiu (kuo.chiu@verizondigitalmedia.com)
+Author: James Chiu (kuo.chiu@verizondigitalmedia.com)
 Last Modified: June 7, 2018
 """
 

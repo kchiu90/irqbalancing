@@ -1,13 +1,16 @@
-git #!/usr/bin/env python
+#!/usr/bin/env python
 
-# Task: IRQ Service Client
-# We would like a python client to interact with this service.
-# It should be able to:
-# - Give a complete overview of the current distribution of interrupts.
-# - Give a summary of how many interrupts have been serviced by each CPU.
-# - Be able to use the service to set the affinity of various interrupts.
-# Author: James Chiu (kuo.chiu@verizondigitalmedia.com)
-# Last Modified: June 7, 2018
+"""
+Task: IRQ Service Client
+We would like a python client to interact with this service.
+It should be able to:
+- Give a complete overview of the current distribution of interrupts.
+- Give a summary of how many interrupts have been serviced by each CPU.
+- Be able to use the service to set the affinity of various interrupts.
+
+Author: James Kuo Chiu (kuo.chiu@verizondigitalmedia.com)
+Last Modified: June 7, 2018
+"""
 
 import argparse
 import requests

@@ -1,0 +1,3 @@
+[console_scripts]
+irqservice = server.irq_server:main
+
