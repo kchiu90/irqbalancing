@@ -21,6 +21,12 @@ Installing collected packages: prettytable
 Successfully installed prettytable-0.7.2
 ```
 
+* Make sure sample_interrupt is stored under same directory.
+```
+parser.add_argument('-l', '--location', default='sample_interrupt',
+                     help="location of the sample interrupt file")
+```
+
 * To run the script: python irq_balance.py (--threshold 10 is optional)
 ```
 jchiu@y700:~/code/irqbalancing$ python irq_balance.py --threshold 10
@@ -95,7 +101,140 @@ jchiu@y700:~/code/irqbalancing$ python irq_balance.py --threshold 10
 +------+--------+--------+-----------------+
 ```
 
+------------
+
 ## Task: IRQ Client/Server in Python
+
+### Server side: irq_server.py
+```
+To Execute: python irq_server.py 
+Location: /code/irqbalancing/server
+```
+#### Options available:
+##### get_current_distribution
+```
+Arguments:
+* format = [ json | raw ]
+```
+
+```
+Example:
+http://localhost:5000/get_current_distribution?format=json
+http://localhost:5000/get_current_distribution?format=raw
+```
+##### Get_interrupt_by_cpu
+```
+Arguments: 
+* cpu (default: all)
+* second (default: 5)
+```
+```
+Example:
+http://localhost:5000/get_interrupt_by_cpu
+http://localhost:5000/get_interrupt_by_cpu?cpu=1&second=3
+```
+##### set_affinity/irq#
+```
+Arguments:
+* irq
+* cpu
+```
+```
+Example:
+http://localhost:5000/set_affinity/129?cpu=f
+```
+
+------------
+
+### Client side: irq_client.py
+```
+To Execute: python irq_client.py [ --url | --port | --view | --second | --irq | --cpu ]
+Location: /code/irqbalancing
+```
+Default value for arguments listed above:
+```
+--url = http://localhost
+--port = 5000
+--second = 5
+--cpu = 1
+```
+#### Options available:
+##### --view distribution
+```
+jchiu@y700:~/code/irqbalancing$ python irq_client.py --view distribution
+            CPU0       CPU1       CPU2       CPU3       
+   0:         21          0          0          0  IR-IO-APIC    2-edge      timer
+   8:          1          0          0          0  IR-IO-APIC    8-edge      rtc0
+   9:          0          0          0          0  IR-IO-APIC    9-fasteoi   acpi
+  17:        283        104        189         46  IR-IO-APIC   17-fasteoi   snd_hda_intel:card1
+ 120:          0          0          0          0  DMAR-MSI    0-edge      dmar0
+ 121:          0          0          0          0  IR-PCI-MSI 16384-edge      PCIe PME
+ 122:          0          0          0          0  IR-PCI-MSI 458752-edge      aerdrv, PCIe PME
+ 123:          0          0          0          0  IR-PCI-MSI 468992-edge      aerdrv, PCIe PME
+ 124:        148         81     343319         91  IR-PCI-MSI 327680-edge      xhci_hcd
+ 125:       6973       1745       1812      42554  IR-PCI-MSI 376832-edge      ahci[0000:00:17.0]
+ 126:          0          0          0          0  IR-PCI-MSI 1048576-edge      enp2s0
+ 127:        601        154     824177       9216  IR-PCI-MSI 524288-edge      nvkm
+ 128:         30          1          0          3  IR-PCI-MSI 360448-edge      mei_me
+ 129:        291      39876       2828      20651  IR-PCI-MSI 1572864-edge      iwlwifi
+ 130:        615        146         11         32  IR-PCI-MSI 514048-edge      snd_hda_intel:card0
+ NMI:         50         50         51         52   Non-maskable interrupts
+ LOC:   35505103   33437824   32126113   38625686   Local timer interrupts
+ SPU:          0          0          0          0   Spurious interrupts
+ PMI:         50         50         51         52   Performance monitoring interrupts
+ IWI:          0          0          0          0   IRQ work interrupts
+ RTR:          0          0          0          0   APIC ICR read retries
+ RES:     103642      97831      99954      74961   Rescheduling interrupts
+ CAL:      73046      76704      70844      71996   Function call interrupts
+ TLB:      69211      75614      69508      70965   TLB shootdowns
+ TRM:          0          0          0          0   Thermal event interrupts
+ THR:          0          0          0          0   Threshold APIC interrupts
+ DFR:          0          0          0          0   Deferred Error APIC interrupts
+ MCE:          0          0          0          0   Machine check exceptions
+ MCP:         17         17         17         17   Machine check polls
+ ERR:          0
+ MIS:          0
+ PIN:          0          0          0          0   Posted-interrupt notification event
+ NPI:          0          0          0          0   Nested posted-interrupt event
+ PIW:          0          0          0          0   Posted-interrupt wakeup event
+```
+
+##### --view cpu-summary 
+```Arguments:
+* second (default 5 sec, can manually specify desired time)
+```
+```
+jchiu@y700:~/code/irqbalancing$ python irq_client.py --view cpu-summary
+Interrupt handled by CPU in last 5 seconds
+CPU2: 19513
+CPU3: 5350
+CPU0: 10486
+CPU1: 11228
+
+jchiu@y700:~/code/irqbalancing$ python irq_client.py --view cpu-summary --second 3
+Interrupt handled by CPU in last 3 seconds
+CPU2: 1864
+CPU3: 12786
+CPU0: 4050
+CPU1: 8728
+```
+
+##### irq (When irq_server is running as root)
+```
+Arguments:
+* irq
+* cpu
+```
+```
+jchiu@y700:~/code/irqbalancing$ cat /proc/irq/129/smp_affinity
+2
+jchiu@y700:~/code/irqbalancing$ python irq_client.py --irq 129 --cpu f
+Successfully set affinity for IRQ 129
+jchiu@y700:~/code/irqbalancing$ cat /proc/irq/129/smp_affinity
+f
+```
+
+------------
 
 ### How to do init.d
 * Make the init.d script executable
