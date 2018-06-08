@@ -228,7 +228,7 @@ jchiu@y700:~/code/irqbalancing$ python irq_balance.py --threshold 10
 
 ## Task: IRQ Client/Server in Python
 
-### Server side: irq_server.py
+### Server side: `irq_server.py`
 ```
 To Execute: python irq_server.py 
 Location: /code/irqbalancing/server
